@@ -35,13 +35,8 @@ resource "azurerm_service_plan" "app_service_plan" {
   name                = "example-serviceplan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  kind                = "Linux"
-  reserved            = true
-
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+  sku_name            = "S1"
+  os_type             = "Linux"
 }
 
 # Create an Azure Linux Web App using the new azurerm_linux_web_app resource
