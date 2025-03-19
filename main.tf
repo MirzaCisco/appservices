@@ -33,7 +33,7 @@ resource "azurerm_service_plan" "app_service_plan" {
   name                = "example-serviceplan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  sku_name            = "S1"
+  sku_name            = "S2"
   os_type             = "Linux"
 }
 
