@@ -1,4 +1,4 @@
-# Configure the Azure provider
+# Configure the Azure provider using environment variables from Terraform Cloud
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id
@@ -7,13 +7,13 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
-# Create a Resource Group
+# Create the Resource Group RG-RedSpoke in East US
 resource "azurerm_resource_group" "rg" {
-  name     = "example-rg"
+  name     = "RG-RedSpoke"
   location = "East US"
 }
 
-# Create an App Service Plan
+# Create an App Service Plan within the resource group
 resource "azurerm_app_service_plan" "app_service_plan" {
   name                = "example-appserviceplan"
   location            = azurerm_resource_group.rg.location
@@ -27,7 +27,7 @@ resource "azurerm_app_service_plan" "app_service_plan" {
   }
 }
 
-# Create an Azure App Service
+# Create an Azure App Service associated with the App Service Plan
 resource "azurerm_app_service" "app_service" {
   name                = "example-appservice"
   location            = azurerm_resource_group.rg.location
@@ -39,8 +39,20 @@ resource "azurerm_app_service" "app_service" {
   }
 }
 
-# Variables for sensitive data
-variable "subscription_id" {}
-variable "client_id" {}
-variable "client_secret" {}
-variable "tenant_id" {}
+# Variable definitions for sensitive credentials
+variable "subscription_id" {
+  description = "The Azure subscription ID."
+}
+
+variable "client_id" {
+  description = "The Application (client) ID."
+}
+
+variable "client_secret" {
+  description = "The client secret for the Azure Service Principal."
+  sensitive   = true
+}
+
+variable "tenant_id" {
+  description = "The Directory (tenant) ID."
+}
