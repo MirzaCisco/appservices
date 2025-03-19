@@ -6,6 +6,24 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
+# Variable declarations for the Azure credentials
+variable "subscription_id" {
+  description = "The Azure subscription ID."
+}
+
+variable "client_id" {
+  description = "The Azure Service Principal client ID."
+}
+
+variable "client_secret" {
+  description = "The Azure Service Principal client secret."
+  sensitive   = true
+}
+
+variable "tenant_id" {
+  description = "The Azure tenant ID."
+}
+
 # Create the Resource Group RG-RedSpoke in East US
 resource "azurerm_resource_group" "rg" {
   name     = "RG-RedSpoke"
