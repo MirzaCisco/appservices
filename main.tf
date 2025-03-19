@@ -1,4 +1,3 @@
-# Configure the Azure provider using environment variables from Terraform Cloud
 provider "azurerm" {
   features {}
   subscription_id = var.subscription_id
@@ -13,9 +12,9 @@ resource "azurerm_resource_group" "rg" {
   location = "East US"
 }
 
-# Create an App Service Plan within the resource group
-resource "azurerm_app_service_plan" "app_service_plan" {
-  name                = "example-appserviceplan"
+# Create a Service Plan using the new azurerm_service_plan resource
+resource "azurerm_service_plan" "app_service_plan" {
+  name                = "example-serviceplan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   kind                = "Linux"
@@ -27,32 +26,14 @@ resource "azurerm_app_service_plan" "app_service_plan" {
   }
 }
 
-# Create an Azure App Service associated with the App Service Plan
-resource "azurerm_app_service" "app_service" {
-  name                = "example-appservice"
+# Create an Azure Linux Web App using the new azurerm_linux_web_app resource
+resource "azurerm_linux_web_app" "app_service" {
+  name                = "example-linuxwebapp"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  app_service_plan_id = azurerm_app_service_plan.app_service_plan.id
+  service_plan_id     = azurerm_service_plan.app_service_plan.id
 
   site_config {
     linux_fx_version = "PYTHON|3.8"
   }
-}
-
-# Variable definitions for sensitive credentials
-variable "subscription_id" {
-  description = "The Azure subscription ID."
-}
-
-variable "client_id" {
-  description = "The Application (client) ID."
-}
-
-variable "client_secret" {
-  description = "The client secret for the Azure Service Principal."
-  sensitive   = true
-}
-
-variable "tenant_id" {
-  description = "The Directory (tenant) ID."
 }
